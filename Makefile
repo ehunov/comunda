@@ -1,19 +1,7 @@
-ENV?=dev
+init: build mvn up
 
-pwd := $(shell pwd)
-dr := docker run -it -v $(pwd):/app --rm
-de := docker-compose exec
-
-dca := docker-compose \
-	-f docker-compose.yml \
-
-ifeq ($(ENV), prod)
-upCommand := $(dca) up -d
-else
-upCommand := docker-compose -f docker-compose.yml
-endif
-
-init: up
+ups:
+	docker-compose up
 
 up:
 	docker-compose up -d
@@ -21,5 +9,14 @@ up:
 down:
 	docker-compose down
 
+build:
+	docker build ./docker/app -t outbound.docker.lamoda.ru/datamatrix-camunda:latest --no-cache
+
+mvn:
+	docker-compose run --rm app sh -c "./mvnw package && java -jar ./target"
+
 sh:
-	$(de-php) 'bash'
+	docker-compose exec app sh -c "sh"
+
+run-sh:
+	docker-compose run --rm app sh -c "sh"
