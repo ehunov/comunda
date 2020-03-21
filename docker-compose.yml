@@ -1,14 +1,14 @@
 version: '3.3'
 services:
-    app:
+    camunda:
         image: outbound.docker.lamoda.ru/datamatrix-camunda
         ports:
-            - 8080:8080
+            - 80:8080
+            - 8000:8000
         volumes:
             - ./:/app
-        depends_on:
-            - postgres
-        command: sh -c "java -jar target/datamatrix-0.0.1-SNAPSHOT.jar"
+            - springdata:/home/spring
+        command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000 -jar target/datamatrix-0.0.1-SNAPSHOT.jar
     postgres:
         image: postgres:12-alpine
         ports:
@@ -22,3 +22,4 @@ services:
             - POSTGRES_DB=${DATABASE_NAME}
 volumes:
     pgdata:
+    springdata:
