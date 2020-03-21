@@ -1,6 +1,6 @@
 package comunda.example.datamatrix.api.controller
 
-import comunda.example.datamatrix.model.CreateShipmentDocumentRequest
+import comunda.example.datamatrix.model.ShipmentDocumentRequest
 import org.camunda.bpm.engine.RuntimeService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -9,12 +9,12 @@ import javax.inject.Inject
 
 @RestController
 class RequestController @Inject constructor(
-        val runtimeService: RuntimeService
+    val runtimeService: RuntimeService
 ) {
-    @PostMapping("/shipments")
-    fun create(@RequestBody createShipmentDocumentRequest: CreateShipmentDocumentRequest) {
+    @PostMapping("/shipment-document-request")
+    fun create(@RequestBody shipmentDocumentRequest: ShipmentDocumentRequest) {
         runtimeService.createProcessInstanceByKey("createShipmentDocument")
-                .setVariable("createShipmentDocumentRequest", createShipmentDocumentRequest)
-                .execute()
+            .setVariable("shipmentDocumentRequest", shipmentDocumentRequest)
+            .execute()
     }
 }

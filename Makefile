@@ -1,4 +1,4 @@
-init: build mvn up
+init: build @package-internal up
 
 ups:
 	docker-compose up
@@ -10,19 +10,16 @@ up:
 
 reup: down up
 
-package: up @package-internal reups
+package: @package-internal reups
 
 @package-internal:
-	docker-compose exec camunda sh -c "./mvnw package -DskipTests"
+	docker-compose run --rm camunda sh -c "./mvnw package -DskipTests"
 
 down:
 	docker-compose down
 
 build:
 	docker build ./docker/camunda -t outbound.docker.lamoda.ru/datamatrix-camunda:latest --no-cache
-
-mvn:
-	docker-compose run --rm camunda sh -c "./mvnw package -DskipTests"
 
 sh:
 	docker-compose exec camunda sh -c "sh"

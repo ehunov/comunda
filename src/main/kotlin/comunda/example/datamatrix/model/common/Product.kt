@@ -1,7 +1,10 @@
 package comunda.example.datamatrix.model.common
 
+import java.io.Serializable
+
 data class Product(
-        val uit: String
-) {
-    val status: String? = null;
-}
+    var description: String? = null,
+    var cost: Int? = null,
+    var tax: Int? = null,
+    var dataMatrix: DataMatrix? = null
+): Serializable

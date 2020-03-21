@@ -9,5 +9,5 @@ import org.springframework.boot.runApplication
 class DatamatrixApplication
 
 fun main(args: Array<String>) {
-	runApplication<DatamatrixApplication>(*args)
+    runApplication<DatamatrixApplication>(*args)
 }
