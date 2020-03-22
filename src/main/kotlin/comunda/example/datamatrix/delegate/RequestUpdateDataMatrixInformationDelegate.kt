@@ -16,14 +16,15 @@ class RequestUpdateDataMatrixInformationDelegate @Inject constructor(
     override fun execute(execution: DelegateExecution) {
         val product = execution.getVariableLocal("product") as Product
 
-        if (product.dataMatrix?.uit === null) {
+        if (product.uit === null) {
             return
         }
 
-        execution.setVariable(UpdateDataMatrixInformationListener.CORRELATION_UIT, product.dataMatrix!!.uit)
+        execution.setVariable(UpdateDataMatrixInformationListener.CORRELATION_VARIABLE_UIT, product.uit)
 
+        // fake req/sub
         listener.handleMessage(DataMatrixInformationUpdatedMessage(
-            product.dataMatrix!!.uit,
+            product.uit!!,
             DataMatrixStatus.INTRODUCED
         ))
     }

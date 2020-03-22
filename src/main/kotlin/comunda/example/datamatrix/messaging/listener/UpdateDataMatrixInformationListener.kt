@@ -13,12 +13,12 @@ class UpdateDataMatrixInformationListener @Inject constructor(
     fun handleMessage(message: DataMatrixInformationUpdatedMessage) {
         runtimeService.createMessageCorrelation(MESSAGE_NAME)
             .setVariable("dataMatrix", DataMatrix(message.uit, message.status))
-            .processInstanceVariableEquals(CORRELATION_UIT, message.uit)
+            .processInstanceVariableEquals(CORRELATION_VARIABLE_UIT, message.uit)
             .correlateAllWithResult()
     }
 
     companion object {
         const val MESSAGE_NAME = "DataMatrixInformationUpdated"
-        const val CORRELATION_UIT = "uit"
+        const val CORRELATION_VARIABLE_UIT = "uit"
     }
 }

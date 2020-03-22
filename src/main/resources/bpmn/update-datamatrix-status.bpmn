@@ -5,25 +5,19 @@
       <bpmn:outgoing>Flow_0xrib41</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0xrib41" sourceRef="StartEvent_1" targetRef="Activity_01lqmoh" />
-    <bpmn:serviceTask id="Activity_01lqmoh" name="Send update information request" camunda:class="comunda.example.datamatrix.delegate.RequestUpdateDataMatrixInformationDelegate">
+    <bpmn:serviceTask id="Activity_01lqmoh" name="Send update information request" camunda:asyncAfter="true" camunda:class="comunda.example.datamatrix.delegate.RequestUpdateDataMatrixInformationDelegate">
       <bpmn:incoming>Flow_0xrib41</bpmn:incoming>
-      <bpmn:outgoing>Flow_0oqnokl</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0b6kge1</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:intermediateCatchEvent id="Event_03h7r5b">
-      <bpmn:incoming>Flow_0oqnokl</bpmn:incoming>
-      <bpmn:outgoing>Flow_0s40iir</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0urotsd" messageRef="Message_0c2tq5h" />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="Flow_0oqnokl" sourceRef="Activity_01lqmoh" targetRef="Event_03h7r5b" />
-    <bpmn:sequenceFlow id="Flow_0s40iir" sourceRef="Event_03h7r5b" targetRef="Activity_0bipony" />
-    <bpmn:endEvent id="Event_03h4nu9">
-      <bpmn:incoming>Flow_0jfd3ve</bpmn:incoming>
+    <bpmn:sequenceFlow id="Flow_0b6kge1" sourceRef="Activity_01lqmoh" targetRef="Activity_0q85avc" />
+    <bpmn:endEvent id="Event_0h0xy7f">
+      <bpmn:incoming>Flow_0ysm368</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0jfd3ve" sourceRef="Activity_0bipony" targetRef="Event_03h4nu9" />
-    <bpmn:serviceTask id="Activity_0bipony" name="Enrich product with DataMatrix" camunda:class="comunda.example.datamatrix.delegate.EnrichProductWithDataMatrixInformationDelegate">
-      <bpmn:incoming>Flow_0s40iir</bpmn:incoming>
-      <bpmn:outgoing>Flow_0jfd3ve</bpmn:outgoing>
-    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0ysm368" sourceRef="Activity_0q85avc" targetRef="Event_0h0xy7f" />
+    <bpmn:receiveTask id="Activity_0q85avc" name="Wait for DataMatrix information" camunda:asyncBefore="true" messageRef="Message_0c2tq5h">
+      <bpmn:incoming>Flow_0b6kge1</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ysm368</bpmn:outgoing>
+    </bpmn:receiveTask>
   </bpmn:process>
   <bpmn:message id="Message_0c2tq5h" name="DataMatrixInformationUpdated" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -32,17 +26,13 @@
         <di:waypoint x="215" y="117" />
         <di:waypoint x="270" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0oqnokl_di" bpmnElement="Flow_0oqnokl">
+      <bpmndi:BPMNEdge id="Flow_0b6kge1_di" bpmnElement="Flow_0b6kge1">
         <di:waypoint x="370" y="117" />
-        <di:waypoint x="472" y="117" />
+        <di:waypoint x="460" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0s40iir_di" bpmnElement="Flow_0s40iir">
-        <di:waypoint x="508" y="117" />
-        <di:waypoint x="620" y="117" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0jfd3ve_di" bpmnElement="Flow_0jfd3ve">
-        <di:waypoint x="720" y="117" />
-        <di:waypoint x="832" y="117" />
+      <bpmndi:BPMNEdge id="Flow_0ysm368_di" bpmnElement="Flow_0ysm368">
+        <di:waypoint x="560" y="117" />
+        <di:waypoint x="652" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
@@ -50,14 +40,11 @@
       <bpmndi:BPMNShape id="Activity_1bqaqng_di" bpmnElement="Activity_01lqmoh">
         <dc:Bounds x="270" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1rbek1j_di" bpmnElement="Event_03h7r5b">
-        <dc:Bounds x="472" y="99" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0h0xy7f_di" bpmnElement="Event_0h0xy7f">
+        <dc:Bounds x="652" y="99" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_03h4nu9_di" bpmnElement="Event_03h4nu9">
-        <dc:Bounds x="832" y="99" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05y1loe_di" bpmnElement="Activity_0bipony">
-        <dc:Bounds x="620" y="77" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0ggtknz_di" bpmnElement="Activity_0q85avc">
+        <dc:Bounds x="460" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

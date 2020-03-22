@@ -6,18 +6,29 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1hyv19p" sourceRef="StartEvent_1" targetRef="updateDataMatrixStatuses" />
     <bpmn:sequenceFlow id="Flow_1leoci9" sourceRef="updateDataMatrixStatuses" targetRef="Activity_058z51f" />
-    <bpmn:serviceTask id="Activity_058z51f" name="Debug" camunda:class="comunda.example.datamatrix.delegate.DebugDelegate">
+    <bpmn:serviceTask id="Activity_058z51f" name="Create shipment document" camunda:asyncBefore="true" camunda:class="comunda.example.datamatrix.delegate.CreateShipmentDocumentDelegate">
       <bpmn:incoming>Flow_1leoci9</bpmn:incoming>
+      <bpmn:outgoing>Flow_04z1rf7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:callActivity id="updateDataMatrixStatuses" name="Update DataMatrix statuses" calledElement="updateDataMatrixStatus" camunda:variableMappingClass="comunda.example.datamatrix.delegate.ProductToProductsMappingDelegate">
+    <bpmn:callActivity id="updateDataMatrixStatuses" name="Update DataMatrix statuses" calledElement="updateDataMatrixStatus" camunda:variableMappingClass="comunda.example.datamatrix.delegate.DataMatrixToDataMatrixesMappingDelegate">
       <bpmn:extensionElements>
         <camunda:in variables="all" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1hyv19p</bpmn:incoming>
       <bpmn:outgoing>Flow_1leoci9</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${shipmentDocumentRequest.products}" camunda:elementVariable="product" />
+      <bpmn:multiInstanceLoopCharacteristics camunda:asyncBefore="true" camunda:asyncAfter="true" camunda:collection="${shipmentDocumentRequest.products}" camunda:elementVariable="product" />
     </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_04z1rf7" sourceRef="Activity_058z51f" targetRef="Activity_04gxlxs" />
+    <bpmn:receiveTask id="Activity_04gxlxs" name="Wait for document status" camunda:asyncBefore="true" messageRef="Message_15sgi4k">
+      <bpmn:incoming>Flow_04z1rf7</bpmn:incoming>
+      <bpmn:outgoing>Flow_04p3zwk</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:endEvent id="Event_199p9ls">
+      <bpmn:incoming>Flow_04p3zwk</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_04p3zwk" sourceRef="Activity_04gxlxs" targetRef="Event_199p9ls" />
   </bpmn:process>
+  <bpmn:message id="Message_15sgi4k" name="DocumentStatusUpdated" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="createShipmentDocument">
       <bpmndi:BPMNEdge id="Flow_1hyv19p_di" bpmnElement="Flow_1hyv19p">
@@ -26,7 +37,15 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1leoci9_di" bpmnElement="Flow_1leoci9">
         <di:waypoint x="450" y="117" />
-        <di:waypoint x="600" y="117" />
+        <di:waypoint x="560" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04z1rf7_di" bpmnElement="Flow_04z1rf7">
+        <di:waypoint x="660" y="117" />
+        <di:waypoint x="780" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04p3zwk_di" bpmnElement="Flow_04p3zwk">
+        <di:waypoint x="880" y="117" />
+        <di:waypoint x="962" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
@@ -34,8 +53,14 @@
       <bpmndi:BPMNShape id="Activity_0cbmd9y_di" bpmnElement="updateDataMatrixStatuses">
         <dc:Bounds x="350" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1lipwn8_di" bpmnElement="Activity_04gxlxs">
+        <dc:Bounds x="780" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_199p9ls_di" bpmnElement="Event_199p9ls">
+        <dc:Bounds x="962" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_19ihup7_di" bpmnElement="Activity_058z51f">
-        <dc:Bounds x="600" y="77" width="100" height="80" />
+        <dc:Bounds x="560" y="77" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
